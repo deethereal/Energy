@@ -5,6 +5,8 @@ const fs = require("fs");
 const multer = require("multer")
 const upload = multer({ dest: 'uploads/' });
 const path = require("path")
+const exec = require("child_process");
+
 
 app.use(express.static(__dirname + '/WebApp'));
 
@@ -24,7 +26,10 @@ app.get('/', function (req, res){
 
 app.post('/', upload.single('file'), (req, res) => {
     console.log("got data!")
-    console.log(req.file.originalname);
+    console.log(req.file);
+    let file = fs.readFileSync(__dirname + '/' + req.file.path)
+    fs.writeFileSync("tmp.csv", file);
+    exec.execFileSync("process.py", ['tmp.csv'])
     res.status(200).sendFile(__dirname + '/WebApp/success.html');
 })
 
