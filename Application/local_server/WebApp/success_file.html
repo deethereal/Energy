@@ -20,7 +20,7 @@
         }
     </script>
 </head>
-<body>
+<body onload="fetcher()">
 
 <!--Navigation bar-->
 
@@ -60,7 +60,21 @@
     </div>
 </section>
 
+<!--ans-->
+<section class="answer">
+    <div class="container text-center">
+        <h2>Ответы</h2>
+    </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-2 d-grid">
+                <a class="btn text-center" download href="/result.json">Скачать файл</a>
+            </div>
+        </div>
+    </div>
+
+</section>
 
 <!--information-->
 <form action="/WebApp" method="post">

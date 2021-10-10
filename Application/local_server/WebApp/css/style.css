@@ -75,3 +75,11 @@ header{
 .pascal .form-control{
     background-color: #0e6ebe;
 }
+
+.answer{
+    padding-top: 50px;
+}
+
+#select_file{
+    padding-bottom: 50px;
+}
