@@ -16,7 +16,7 @@ def main(args):
         df = pd.DataFrame({'count': data})
         print(df)
         df = df.astype(float)
-        result = pd.DataFrame(model.predict(scaler.transform(df.transpose().values)),columns=['valve_'+str(i) for i in range(1,13)])
+        result = pd.DataFrame(model.predict(scaler.transform(df.values)),columns=['valve_'+str(i) for i in range(1,13)])
     result.to_json('./WebApp/result.json')
 
 if __name__ == '__main__':
