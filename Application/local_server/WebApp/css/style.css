@@ -1,6 +1,7 @@
 :root{
     --btn-color: #f93a63;
     --font-color: #ffffff;
+    --btn-color-gr: #95b85f;
 }
 body{
     background: #000000;
@@ -14,6 +15,7 @@ header, footer, section {
 header{
     margin-top: 80px;
     padding-top: 200px;
+    padding-bottom: 500px;
 }
 
 .bg-image{
@@ -29,7 +31,7 @@ header{
 /*file selector*/
 .form-control{
     background-color: var(--btn-color);
-    border-color: var(--btn-color);
+    border-color: #ffffff;
 }
 
 /*navbar*/
@@ -59,7 +61,17 @@ header{
 }
 
 /*other*/
+.MyMap{
+    background-color: #e3f4f8;
+}
 
+#mainMap{
+    width: 100%;
+    padding: 0 60px;
+    position: relative;
+}
 
-
-
+/*values*/
+.pascal .form-control{
+    background-color: #0e6ebe;
+}
