@@ -1,7 +1,7 @@
 # Energy
 Energy hack repo navigation:
 * `model_building.ipyb` — файл с построеним и валидацией моделей
-* `data_visual.ipyb` — файл с виузализацией
+* `data_visual.ipynb` — файл с виузализацией
 * `process.py` — обработка файла 
 
 
