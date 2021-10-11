@@ -17,7 +17,8 @@ def get_table_download_link(df):
 
 st.set_page_config(layout="wide")
 st.title('Демо версия модели')
-model = CatBoostRegressor().load_model('CatBoost1.pkl')
+model = joblib.load('ridge_reg.pkl')
+scaler = joblib.load('scaler.pkl')
 with st.form('text'):
 
 	image = Image.open('map.jpg')	
@@ -25,6 +26,7 @@ with st.form('text'):
 		image = image.convert('RGB')
 	img_array = np.array(image) # if you want to pass it to OpenCV
 	st.image(image, use_column_width=True)
+	st.write(' [Q] = $м^3$/c, [P] = Па')
 	c1,c2,c3,c4= st.columns([1,1,1,1])
 	c5,c6,c7,c8,c9,c10,c11,c12,c13 = st.columns([1,1,1,1,1,1,1,1,1])
 	c14,c15,c16,c17,c18,c19,c20,c21 = st.columns([1,1,1,1,1,1,1,1])
@@ -55,32 +57,41 @@ with st.form('text'):
 	QPlant_3= c24.text_input("QPlant_3", value=0)
 	QPlant_4= c25.text_input("QPlant_4", value=0)
 
-	file_button = st.form_submit_button('Посчитать значения заслонок')
+	file_button = st.form_submit_button('Рассчитать значения заслонок')
 	if file_button:
 		df = pd.DataFrame(data=np.array([QGRS_1, QGRS_2, QPlant_1, QPlant_2, QPlant_3, QPlant_4,
        PGRS_1, PGRS_2, P_1, P_2, P_3, P_4, P_5, P_6, P_7,
-       P_8, P_9, Q_1, Q_2, Q_3, Q_4, Q_5, Q_6, Q_7]).reshape(1,-1),
+       P_8, P_9, Q_1, Q_2, Q_3, Q_4, Q_5, Q_6, Q_7, Q_8]).reshape(1,-1),
        columns=['QGRS_1', 'QGRS_2', 'QPlant_1', 'QPlant_2', 'QPlant_3', 'QPlant_4',
        'PGRS_1', 'PGRS_2', 'P_1', 'P_2', 'P_3', 'P_4', 'P_5', 'P_6', 'P_7',
-       'P_8', 'P_9', 'Q_1', 'Q_2', 'Q_3', 'Q_4', 'Q_5', 'Q_6', 'Q_7'], index=[0])
+       'P_8', 'P_9', 'Q_1', 'Q_2', 'Q_3', 'Q_4', 'Q_5', 'Q_6', 'Q_7','Q_8'], index=[0])
 		
-		preds = pd.DataFrame(model.predict(df), columns=['Заслонка '+str(i) for i in range(1,13)])
+		predictions = model.predict(scaler.transform(df.values))[0]
+		ver_preds = []
+		for i in range(len(predictions)):
+			if predictions[i]>1:
+				ver_preds.append(1)
+			elif predictions[i]<0:
+				ver_preds.append(0.1)
+			else:
+				ver_preds.append(predictions[i])
+		preds = pd.DataFrame(data = np.array(ver_preds).reshape(1,-1),
+					 columns=['Заслонка '+str(i) for i in range(1,13)])
 		st.table(preds)
-
-st.write('OR')
+st.write('ИЛИ')
 
 
 with st.form('file'):
-	uploaded_file = st.file_uploader("Upload a csv file", ["csv"])
-	file_button = st.form_submit_button('Predict labels')
+	uploaded_file = st.file_uploader("Загрузите csv файл", ["csv"])
+	file_button = st.form_submit_button('Рассчитать значения заслонок')
 	if uploaded_file:
 		try:
 			file = pd.read_csv(uploaded_file,sep=';')
 		except:
 			file = pd.read_csv(uploaded_file)
 
-		file=file.replace(',','.',regex=True).astype('float64')
-		st.write(file.describe())
+		#pd.DataFrame(, columns=['Заслонка '+str(i) for i in range(1,13)])
+		st.table(model.predict(scaler.transform(file.values)))
 			
 
 
